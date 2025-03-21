@@ -3,8 +3,14 @@ const twilio = require('twilio');
 const cors = require('cors');
 const app = express();
 
+// Configura CORS para permitir solicitudes desde tu dominio de Netlify
+app.use(cors({
+  origin: 'https://curaesencial.netlify.app', // Reemplaza con tu dominio exacto de Netlify
+  methods: ['GET', 'POST'], // Métodos permitidos
+  allowedHeaders: ['Content-Type'] // Encabezados permitidos
+}));
+
 app.use(express.json());
-app.use(cors());
 
 // Configuración de Twilio usando variables de entorno
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -17,7 +23,7 @@ app.post('/send-sms', async (req, res) => {
   try {
     await client.messages.create({
       body: message,
-      from: process.env.TWILIO_PHONE_NUMBER, // Número de Twilio desde variable de entorno
+      from: process.env.TWILIO_PHONE_NUMBER,
       to: to
     });
     res.status(200).send('SMS enviado');
