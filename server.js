@@ -19,6 +19,7 @@ const client = new twilio(accountSid, authToken);
 
 app.post('/send-sms', async (req, res) => {
   const { to, message } = req.body;
+  console.log('Solicitud recibida:', { to, message }); // Añade este log
 
   try {
     await client.messages.create({
@@ -26,9 +27,10 @@ app.post('/send-sms', async (req, res) => {
       from: process.env.TWILIO_PHONE_NUMBER,
       to: to
     });
+    console.log('SMS enviado con éxito a:', to); // Añade este log
     res.status(200).send('SMS enviado');
   } catch (error) {
-    console.error(error);
+    console.error('Error al enviar SMS:', error); // Añade este log
     res.status(500).send('Error al enviar SMS');
   }
 });
